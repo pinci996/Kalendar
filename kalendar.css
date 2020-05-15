@@ -21,8 +21,17 @@ th:nth-of-type(7), td:nth-of-type(7) {
 table, th, td {
     border: 1px solid black;
     border-collapse: collapse;
-  }
+}
 
 th{
     padding:15px;
+}
+
+.today {
+    background-color: lightblue;
+}
+
+.title {
+    font-weight: bold;
+    font-size: 26px;
 }

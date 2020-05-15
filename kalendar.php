@@ -3,8 +3,15 @@
 date_default_timezone_set('Europe/Zagreb');
 
 
-// Trenutni mjesec
- $ym = date('Y-m');
+// Prošli / Sljedeći mjesec
+if (isset($_GET['ym'])) {
+    $ym = $_GET['ym'];
+} else {
+    // Trenutni mjesec
+    $ym = date('Y-m');
+}
+
+
 
 
 $timestamp = strtotime($ym . '-01');  
@@ -13,7 +20,14 @@ if ($timestamp === false) {
     $timestamp = strtotime($ym . '-01');
 }
 
+// Današnji datum
 $today = date('Y-m-j');
+
+$title = date('F, Y', $timestamp);
+
+// Kreiranje prošlog i sljedećeg mjeseca
+$prev = date('Y-m', strtotime('-1 month', $timestamp));
+$next = date('Y-m', strtotime('+1 month', $timestamp));
 
 // Broj dana u mjesecu
 $day_count = date('t', $timestamp);
@@ -31,7 +45,11 @@ $week .= str_repeat('<td></td>', $str - 1);
 for ($day = 1; $day <= $day_count; $day++, $str++) {
 
     $date = $ym . '-' . $day;
-    $week .= '<td>';
+    if ($today == $date) {
+        $week .= '<td class="today">';
+    } else {
+        $week .= '<td>';
+    }
     
     $week .= $day . '</td>';
 
@@ -62,8 +80,13 @@ for ($day = 1; $day <= $day_count; $day++, $str++) {
 </head>
 <body>
 <div class="container">
-        <h3><a>05/2020</a></h3>
-        <table class="table">
+        <ul class="list-inline">
+            <li><a href="?ym=<?= $prev; ?>" class="btn btn-link">Previous Month</a></li>
+            <li><a href="?ym=<?= $next; ?>" class="btn btn-link">Next month</a></li>
+            <li class="list-inline-item"><span class="title"><?= $title; ?></span></li>
+        </ul>
+        <table>
+        <thead>
             <tr>
                 <th>PON</th>
                 <th>UTO</th>
@@ -73,6 +96,7 @@ for ($day = 1; $day <= $day_count; $day++, $str++) {
                 <th>SUB</th>
                 <th>NED</th>
             </tr>
+        </thead>
             <?php
                 foreach ($weeks as $week) {
                     echo $week;
